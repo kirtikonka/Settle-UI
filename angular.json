@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "ecf1386a-ef52-4122-adb9-18936f8f1368"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -84,6 +85,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "watch": false
+          },
           "configurations": {
             "production": {
               "buildTarget": "settle-ui:build:production"
