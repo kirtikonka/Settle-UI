@@ -11,9 +11,9 @@
     </button>
   </div>
 
-  @if (splitwiseService.groups().length > 0) {
+  @if (settleService.groups().length > 0) {
     <div class="groups-grid">
-      @for (group of splitwiseService.groups(); track group.id) {
+      @for (group of settleService.groups(); track group.id) {
         <a [routerLink]="['/groups', group.id]" class="group-card card card-hover">
           <div class="group-card-header">
             <div class="group-icon-wrap">

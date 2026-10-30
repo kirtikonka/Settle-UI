@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../shared/components/avatar/avatar.component';
-import { SplitwiseService } from '../../core/services/settle.service';
+import { SettleService } from '../../core/services/settle.service';
 import { ModalService } from '../../core/services/modal.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { ModalService } from '../../core/services/modal.service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
   openAddExpense(): void {
@@ -22,12 +22,12 @@ export class HeaderComponent {
 
   onCurrencyChange(event: Event): void {
     const val = (event.target as HTMLSelectElement).value;
-    this.splitwiseService.currency.set(val);
+    this.settleService.currency.set(val);
   }
 
   resetData(): void {
-    if (confirm('Reset all demo data to default Splitwise state?')) {
-      this.splitwiseService.resetDemoData();
+    if (confirm('Reset all demo data to default Settle state?')) {
+      this.settleService.resetDemoData();
     }
   }
 }

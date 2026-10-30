@@ -59,11 +59,11 @@
       <div class="friends-selection-list">
         <div class="friend-item current-user-item">
           <input type="checkbox" checked disabled />
-          <app-avatar [src]="splitwiseService.currentUser().avatarUrl" [name]="splitwiseService.currentUser().name" size="sm"></app-avatar>
-          <span class="user-name">{{ splitwiseService.currentUser().name }} (You)</span>
+          <app-avatar [src]="settleService.currentUser().avatarUrl" [name]="settleService.currentUser().name" size="sm"></app-avatar>
+          <span class="user-name">{{ settleService.currentUser().name }} (You)</span>
         </div>
 
-        @for (friend of splitwiseService.friends(); track friend.id) {
+        @for (friend of settleService.friends(); track friend.id) {
           <div
             class="friend-item"
             [class.selected]="selectedFriendIds.has(friend.id)"

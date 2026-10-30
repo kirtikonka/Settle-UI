@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AvatarComponent } from '../../shared/components/avatar/avatar.component';
-import { SplitwiseService } from '../../core/services/settle.service';
+import { SettleService } from '../../core/services/settle.service';
 import { ModalService } from '../../core/services/modal.service';
 import { GroupCategory } from '../../core/models/group.model';
 
@@ -14,7 +14,7 @@ import { GroupCategory } from '../../core/models/group.model';
   styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
   openAddGroup(): void {

@@ -31,13 +31,13 @@
     <div class="form-group">
       <label class="form-label">Settle with friend:</label>
       <select [ngModel]="selectedFriendId()" (ngModelChange)="onFriendChange($event)" class="form-control">
-        @for (friend of splitwiseService.friends(); track friend.id) {
+        @for (friend of settleService.friends(); track friend.id) {
           <option [value]="friend.id">
             {{ friend.name }}
             @if (friend.balance > 0) {
-              (Owes you {{ splitwiseService.currency() }} {{ friend.balance.toFixed(2) }})
+              (Owes you {{ settleService.currency() }} {{ friend.balance.toFixed(2) }})
             } @else if (friend.balance < 0) {
-              (You owe {{ splitwiseService.currency() }} {{ (-friend.balance).toFixed(2) }})
+              (You owe {{ settleService.currency() }} {{ (-friend.balance).toFixed(2) }})
             } @else {
               (Settled up)
             }
@@ -68,9 +68,9 @@
 
     <!-- Amount -->
     <div class="form-group">
-      <label class="form-label">Amount ({{ splitwiseService.currency() }})</label>
+      <label class="form-label">Amount ({{ settleService.currency() }})</label>
       <div class="amount-container">
-        <span class="currency-prefix">{{ splitwiseService.currency() }}</span>
+        <span class="currency-prefix">{{ settleService.currency() }}</span>
         <input
           type="number"
           min="0.01"

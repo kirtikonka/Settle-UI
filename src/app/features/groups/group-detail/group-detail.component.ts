@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../../shared/components/avatar/avatar.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../../core/services/settle.service';
+import { SettleService } from '../../../core/services/settle.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { Group, GroupCategory, SimplifiedDebt } from '../../../core/models/group.model';
 import { Expense } from '../../../core/models/expense.model';
@@ -21,7 +21,7 @@ type GroupTab = 'expenses' | 'balances' | 'simplified' | 'members';
 export class GroupDetailComponent {
   readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
   readonly activeTab = signal<GroupTab>('expenses');
@@ -38,11 +38,11 @@ export class GroupDetailComponent {
   }
 
   readonly group = computed<Group | undefined>(() => {
-    return this.splitwiseService.getGroupById(this.groupId());
+    return this.settleService.getGroupById(this.groupId());
   });
 
   readonly groupExpenses = computed<Expense[]>(() => {
-    return this.splitwiseService.getGroupExpenses(this.groupId());
+    return this.settleService.getGroupExpenses(this.groupId());
   });
 
   readonly totalSpent = computed<number>(() => {
@@ -50,14 +50,14 @@ export class GroupDetailComponent {
   });
 
   readonly memberBalances = computed<{ user: User; balance: number }[]>(() => {
-    return this.splitwiseService.getGroupMemberBalances(this.groupId());
+    return this.settleService.getGroupMemberBalances(this.groupId());
   });
 
   readonly simplifiedDebts = computed<SimplifiedDebt[]>(() => {
-    return this.splitwiseService.simplifyGroupDebts(this.groupId());
+    return this.settleService.simplifyGroupDebts(this.groupId());
   });
 
-  readonly currency = this.splitwiseService.currency;
+  readonly currency = this.settleService.currency;
 
   openAddExpense(groupId: string): void {
     this.modalService.openAddExpense({ groupId });
@@ -78,12 +78,12 @@ export class GroupDetailComponent {
 
   deleteExpense(id: string): void {
     if (confirm('Are you sure you want to delete this expense?')) {
-      this.splitwiseService.deleteExpense(id);
+      this.settleService.deleteExpense(id);
     }
   }
 
   myBalance(): number {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     return this.memberBalances().find((mb) => mb.user.id === me.id)?.balance || 0;
   }
 
@@ -103,11 +103,11 @@ export class GroupDetailComponent {
   }
 
   getPayerName(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const firstPayer = exp.paidBy[0];
     if (!firstPayer) return 'Unknown';
     if (firstPayer.userId === me.id) return 'you';
-    return this.splitwiseService.getUserById(firstPayer.userId)?.name || 'Someone';
+    return this.settleService.getUserById(firstPayer.userId)?.name || 'Someone';
   }
 
   getCategoryEmoji(category: string): string {
@@ -129,7 +129,7 @@ export class GroupDetailComponent {
   }
 
   getShareClass(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 
@@ -139,7 +139,7 @@ export class GroupDetailComponent {
   }
 
   getShareLabel(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 
@@ -149,7 +149,7 @@ export class GroupDetailComponent {
   }
 
   getShareAmountText(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 

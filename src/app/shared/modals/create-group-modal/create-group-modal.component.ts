@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { ModalService } from '../../../core/services/modal.service';
-import { SplitwiseService } from '../../../core/services/settle.service';
+import { SettleService } from '../../../core/services/settle.service';
 import { GroupCategory, GroupMember } from '../../../core/models/group.model';
 
 @Component({
@@ -16,7 +16,7 @@ import { GroupCategory, GroupMember } from '../../../core/models/group.model';
 })
 export class CreateGroupModalComponent {
   readonly modalService = inject(ModalService);
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
 
   name = '';
   category: GroupCategory = 'trip';
@@ -33,7 +33,7 @@ export class CreateGroupModalComponent {
   createGroup(): void {
     if (!this.name.trim()) return;
 
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const members: GroupMember[] = [
       {
         ...me,
@@ -43,7 +43,7 @@ export class CreateGroupModalComponent {
     ];
 
     this.selectedFriendIds.forEach((friendId) => {
-      const friend = this.splitwiseService.friends().find((f) => f.id === friendId);
+      const friend = this.settleService.friends().find((f) => f.id === friendId);
       if (friend) {
         members.push({
           ...friend,
@@ -53,7 +53,7 @@ export class CreateGroupModalComponent {
       }
     });
 
-    this.splitwiseService.addGroup({
+    this.settleService.addGroup({
       name: this.name.trim(),
       category: this.category,
       members,

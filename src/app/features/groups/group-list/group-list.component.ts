@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../../shared/components/avatar/avatar.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../../core/services/settle.service';
+import { SettleService } from '../../../core/services/settle.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { GroupCategory } from '../../../core/models/group.model';
 
@@ -15,7 +15,7 @@ import { GroupCategory } from '../../../core/models/group.model';
   styleUrl: './group-list.component.scss',
 })
 export class GroupListComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
   openCreateGroup(): void {
@@ -33,12 +33,12 @@ export class GroupListComponent {
   }
 
   getExpenseCount(groupId: string): number {
-    return this.splitwiseService.getGroupExpenses(groupId).length;
+    return this.settleService.getGroupExpenses(groupId).length;
   }
 
   getMyGroupBalance(groupId: string): number {
-    const me = this.splitwiseService.currentUser();
-    const balances = this.splitwiseService.getGroupMemberBalances(groupId);
+    const me = this.settleService.currentUser();
+    const balances = this.settleService.getGroupMemberBalances(groupId);
     return balances.find((b) => b.user.id === me.id)?.balance || 0;
   }
 
@@ -51,7 +51,7 @@ export class GroupListComponent {
 
   getBalanceText(groupId: string): string {
     const bal = this.getMyGroupBalance(groupId);
-    const curr = this.splitwiseService.currency();
+    const curr = this.settleService.currency();
     if (bal > 0.01) return `+${curr} ${bal.toFixed(2)}`;
     if (bal < -0.01) return `-${curr} ${(-bal).toFixed(2)}`;
     return 'settled';

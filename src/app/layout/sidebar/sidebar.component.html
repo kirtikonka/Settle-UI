@@ -20,7 +20,7 @@
     <div class="section-header">
       <div class="section-title-wrap">
         <span class="section-title">GROUPS</span>
-        <span class="count-pill">{{ splitwiseService.groups().length }}</span>
+        <span class="count-pill">{{ settleService.groups().length }}</span>
       </div>
       <button class="add-section-btn" (click)="openAddGroup()" title="Add a group">
         <span class="material-symbols-outlined">add</span>
@@ -28,8 +28,8 @@
       </button>
     </div>
 
-    <div class="items-list">
-      @for (group of splitwiseService.groups(); track group.id) {
+    <div class="items-list">  
+      @for (group of settleService.groups(); track group.id) {
         <a
           [routerLink]="['/groups', group.id]"
           routerLinkActive="active"
@@ -41,7 +41,7 @@
           </div>
         </a>
       }
-      @if (splitwiseService.groups().length === 0) {
+      @if (settleService.groups().length === 0) {
         <div class="empty-hint">No groups yet</div>
       }
     </div>
@@ -52,7 +52,7 @@
     <div class="section-header">
       <div class="section-title-wrap">
         <span class="section-title">FRIENDS</span>
-        <span class="count-pill">{{ splitwiseService.friends().length }}</span>
+        <span class="count-pill">{{ settleService.friends().length }}</span>
       </div>
       <button class="add-section-btn" (click)="openAddFriend()" title="Add a friend">
         <span class="material-symbols-outlined">add</span>
@@ -61,7 +61,7 @@
     </div>
 
     <div class="items-list">
-      @for (friend of splitwiseService.friends(); track friend.id) {
+      @for (friend of settleService.friends(); track friend.id) {
         <a
           [routerLink]="['/friends', friend.id]"
           routerLinkActive="active"
@@ -74,16 +74,16 @@
 
           <div class="item-balance">
             @if (friend.balance > 0) {
-              <span class="balance-text owed-to-you">+{{ splitwiseService.currency() }} {{ friend.balance.toFixed(0) }}</span>
+              <span class="balance-text owed-to-you">+{{ settleService.currency() }} {{ friend.balance.toFixed(0) }}</span>
             } @else if (friend.balance < 0) {
-              <span class="balance-text you-owe">-{{ splitwiseService.currency() }} {{ (-friend.balance).toFixed(0) }}</span>
+              <span class="balance-text you-owe">-{{ settleService.currency() }} {{ (-friend.balance).toFixed(0) }}</span>
             } @else {
               <span class="balance-text settled">settled</span>
             }
           </div>
         </a>
       }
-      @if (splitwiseService.friends().length === 0) {
+      @if (settleService.friends().length === 0) {
         <div class="empty-hint">No friends added</div>
       }
     </div>

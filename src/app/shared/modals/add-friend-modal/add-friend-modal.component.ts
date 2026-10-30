@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ModalService } from '../../../core/services/modal.service';
-import { SplitwiseService } from '../../../core/services/settle.service';
+import { SettleService } from '../../../core/services/settle.service';
 
 @Component({
   selector: 'app-add-friend-modal',
@@ -14,7 +14,7 @@ import { SplitwiseService } from '../../../core/services/settle.service';
 })
 export class AddFriendModalComponent {
   readonly modalService = inject(ModalService);
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
 
   name = '';
   email = '';
@@ -27,7 +27,7 @@ export class AddFriendModalComponent {
   saveFriend(): void {
     if (!this.isValid()) return;
 
-    this.splitwiseService.addFriend({
+    this.settleService.addFriend({
       name: this.name.trim(),
       email: this.email.trim(),
       phone: this.phone.trim() || undefined,

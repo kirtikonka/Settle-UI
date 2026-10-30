@@ -151,7 +151,7 @@
                   <div class="mb-info">
                     <span class="mb-name">
                       {{ mb.user.name }}
-                      @if (mb.user.id === splitwiseService.currentUser().id) {
+                      @if (mb.user.id === settleService.currentUser().id) {
                         <strong>(You)</strong>
                       }
                     </span>
@@ -208,7 +208,7 @@
                     <div class="user-meta">
                       <span class="user-name">
                         {{ debt.fromUser.name }}
-                        @if (debt.fromUser.id === splitwiseService.currentUser().id) {
+                        @if (debt.fromUser.id === settleService.currentUser().id) {
                           <small>(You)</small>
                         }
                       </span>
@@ -229,7 +229,7 @@
                     <div class="user-meta">
                       <span class="user-name">
                         {{ debt.toUser.name }}
-                        @if (debt.toUser.id === splitwiseService.currentUser().id) {
+                        @if (debt.toUser.id === settleService.currentUser().id) {
                           <small>(You)</small>
                         }
                       </span>
@@ -272,7 +272,7 @@
                   <div class="member-details">
                     <span class="name">
                       {{ member.name }}
-                      @if (member.id === splitwiseService.currentUser().id) {
+                      @if (member.id === settleService.currentUser().id) {
                         <span class="you-tag">You</span>
                       }
                     </span>

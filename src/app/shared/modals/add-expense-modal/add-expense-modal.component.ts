@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { ModalService } from '../../../core/services/modal.service';
-import { SplitwiseService } from '../../../core/services/settle.service';
+import { SettleService } from '../../../core/services/settle.service';
 import { ExpenseCategory, ExpensePayer, ExpenseSplit, SplitType } from '../../../core/models/expense.model';
 import { User } from '../../../core/models/user.model';
 
@@ -25,7 +25,7 @@ interface SplitRow {
 })
 export class AddExpenseModalComponent {
   readonly modalService = inject(ModalService);
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
 
   title = '';
   amount: number | null = null;
@@ -54,11 +54,11 @@ export class AddExpenseModalComponent {
     this.amount = null;
     this.category = 'food';
     this.date = new Date().toISOString().split('T')[0];
-    this.selectedPayerId = this.splitwiseService.currentUser().id;
+    this.selectedPayerId = this.settleService.currentUser().id;
     this.splitType.set('EQUAL');
 
-    const groups = this.splitwiseService.groups();
-    const friends = this.splitwiseService.friends();
+    const groups = this.settleService.groups();
+    const friends = this.settleService.friends();
 
     if (initialData?.groupId) {
       this.selectedContext.set(`group:${initialData.groupId}`);
@@ -80,18 +80,18 @@ export class AddExpenseModalComponent {
 
   private updateEligibleMembers(): void {
     const val = this.selectedContext();
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     let members: User[] = [me];
 
     if (val.startsWith('group:')) {
       const gId = val.replace('group:', '');
-      const group = this.splitwiseService.groups().find((g) => g.id === gId);
+      const group = this.settleService.groups().find((g) => g.id === gId);
       if (group) {
         members = [...group.members];
       }
     } else if (val.startsWith('friend:')) {
       const fId = val.replace('friend:', '');
-      const friend = this.splitwiseService.friends().find((f) => f.id === fId);
+      const friend = this.settleService.friends().find((f) => f.id === fId);
       if (friend) {
         members = [me, friend];
       }
@@ -168,8 +168,8 @@ export class AddExpenseModalComponent {
       const diff = Math.round((total - sum) * 100) / 100;
       this.splitValidationWarning.set(
         diff > 0
-          ? `${this.splitwiseService.currency()} ${diff.toFixed(2)} remaining to allocate.`
-          : `${this.splitwiseService.currency()} ${Math.abs(diff).toFixed(2)} over allocated.`
+          ? `${this.settleService.currency()} ${diff.toFixed(2)} remaining to allocate.`
+          : `${this.settleService.currency()} ${Math.abs(diff).toFixed(2)} over allocated.`
       );
     } else {
       this.splitValidationWarning.set(null);
@@ -216,17 +216,17 @@ export class AddExpenseModalComponent {
       isIncluded: row.isIncluded,
     }));
 
-    this.splitwiseService.addExpense({
+    this.settleService.addExpense({
       title: this.title.trim(),
       amount: this.amount!,
-      currency: this.splitwiseService.currency(),
+      currency: this.settleService.currency(),
       category: this.category,
       date: this.date,
       groupId,
       paidBy: payers,
       splits,
       splitType: this.splitType(),
-      createdBy: this.splitwiseService.currentUser().id,
+      createdBy: this.settleService.currentUser().id,
     });
 
     this.close();

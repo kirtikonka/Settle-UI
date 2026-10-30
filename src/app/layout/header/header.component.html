@@ -4,7 +4,7 @@
       <div class="logo-icon">
         <span class="material-symbols-outlined">account_balance_wallet</span>
       </div>
-      <span class="brand-name">Settle<span class="highlight">Wise</span></span>
+      <span class="brand-name"><span class="highlight">Settle</span></span>
     </a>
   </div>
 
@@ -19,7 +19,7 @@
   <div class="header-right">
     <!-- Currency Selector -->
     <div class="currency-toggle">
-      <select [value]="splitwiseService.currency()" (change)="onCurrencyChange($event)" class="currency-select" title="Change Currency">
+      <select [value]="settleService.currency()" (change)="onCurrencyChange($event)" class="currency-select" title="Change Currency">
         <option value="USD">$ USD</option>
         <option value="EUR">€ EUR</option>
         <option value="GBP">£ GBP</option>
@@ -42,11 +42,11 @@
     <!-- User Profile -->
     <div class="user-pill">
       <app-avatar
-        [src]="splitwiseService.currentUser().avatarUrl"
-        [name]="splitwiseService.currentUser().name"
+        [src]="settleService.currentUser().avatarUrl"
+        [name]="settleService.currentUser().name"
         size="sm"
       ></app-avatar>
-      <span class="user-name">{{ splitwiseService.currentUser().name }}</span>
+      <span class="user-name">{{ settleService.currentUser().name }}</span>
     </div>
   </div>
 </header>

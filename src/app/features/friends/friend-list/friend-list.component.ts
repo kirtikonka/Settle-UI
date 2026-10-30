@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AvatarComponent } from '../../../shared/components/avatar/avatar.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../../core/services/settle.service';
+import { SettleService } from '../../../core/services/settle.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { Friend } from '../../../core/models/user.model';
 
@@ -16,15 +16,15 @@ import { Friend } from '../../../core/models/user.model';
   styleUrl: './friend-list.component.scss',
 })
 export class FriendListComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
   searchQuery = signal<string>('');
-  readonly currency = this.splitwiseService.currency;
+  readonly currency = this.settleService.currency;
 
   readonly filteredFriends = computed<Friend[]>(() => {
     const q = this.searchQuery().toLowerCase().trim();
-    const list = this.splitwiseService.friends();
+    const list = this.settleService.friends();
     if (!q) return list;
     return list.filter((f) => f.name.toLowerCase().includes(q) || f.email.toLowerCase().includes(q));
   });

@@ -16,12 +16,12 @@
           class="form-control"
         >
           <optgroup label="Groups">
-            @for (group of splitwiseService.groups(); track group.id) {
+            @for (group of settleService.groups(); track group.id) {
               <option [value]="'group:' + group.id">Group: {{ group.name }}</option>
             }
           </optgroup>
           <optgroup label="Friends (Individual)">
-            @for (friend of splitwiseService.friends(); track friend.id) {
+            @for (friend of settleService.friends(); track friend.id) {
               <option [value]="'friend:' + friend.id">Friend: {{ friend.name }}</option>
             }
           </optgroup>
@@ -45,7 +45,7 @@
       </div>
 
       <div class="form-group flex-1">
-        <label class="form-label">Amount ({{ splitwiseService.currency() }})</label>
+        <label class="form-label">Amount ({{ settleService.currency() }})</label>
         <div class="input-with-icon">
           <span class="material-symbols-outlined input-icon">payments</span>
           <input
@@ -89,9 +89,9 @@
       <label class="form-label">Paid by:</label>
       <div class="payer-picker">
         <select [(ngModel)]="selectedPayerId" class="form-control">
-          <option [value]="splitwiseService.currentUser().id">You ({{ splitwiseService.currentUser().name }})</option>
+          <option [value]="settleService.currentUser().id">You ({{ settleService.currentUser().name }})</option>
           @for (member of eligibleMembers(); track member.id) {
-            @if (member.id !== splitwiseService.currentUser().id) {
+            @if (member.id !== settleService.currentUser().id) {
               <option [value]="member.id">{{ member.name }}</option>
             }
           }
@@ -150,19 +150,19 @@
                 (ngModelChange)="recalculateSplits()"
               />
               <app-avatar [src]="row.user.avatarUrl" [name]="row.user.name" size="sm"></app-avatar>
-              <span class="member-name">{{ row.user.name }} {{ row.user.id === splitwiseService.currentUser().id ? '(You)' : '' }}</span>
+              <span class="member-name">{{ row.user.name }} {{ row.user.id === settleService.currentUser().id ? '(You)' : '' }}</span>
             </div>
 
             <div class="split-inputs">
               @switch (splitType()) {
                 @case ('EQUAL') {
                   <span class="calculated-amount">
-                    {{ splitwiseService.currency() }} {{ row.amount.toFixed(2) }}
+                    {{ settleService.currency() }} {{ row.amount.toFixed(2) }}
                   </span>
                 }
                 @case ('EXACT') {
                   <div class="custom-input-group">
-                    <span>{{ splitwiseService.currency() }}</span>
+                    <span>{{ settleService.currency() }}</span>
                     <input
                       type="number"
                       [(ngModel)]="row.amount"
@@ -184,7 +184,7 @@
                       step="1"
                     />
                     <span>%</span>
-                    <small class="calculated-hint">({{ splitwiseService.currency() }} {{ row.amount.toFixed(2) }})</small>
+                    <small class="calculated-hint">({{ settleService.currency() }} {{ row.amount.toFixed(2) }})</small>
                   </div>
                 }
                 @case ('SHARES') {
@@ -199,7 +199,7 @@
                       step="1"
                     />
                     <span>parts</span>
-                    <small class="calculated-hint">({{ splitwiseService.currency() }} {{ row.amount.toFixed(2) }})</small>
+                    <small class="calculated-hint">({{ settleService.currency() }} {{ row.amount.toFixed(2) }})</small>
                   </div>
                 }
               }
