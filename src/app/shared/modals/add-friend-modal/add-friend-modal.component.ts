@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ModalService } from '../../../core/services/modal.service';
-import { SplitwiseService } from '../../../core/services/splitwise.service';
+import { SplitwiseService } from '../../../core/services/settle.service';
 
 @Component({
   selector: 'app-add-friend-modal',

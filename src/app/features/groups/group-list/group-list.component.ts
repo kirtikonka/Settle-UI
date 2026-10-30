@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../../shared/components/avatar/avatar.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../../core/services/splitwise.service';
+import { SplitwiseService } from '../../../core/services/settle.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { GroupCategory } from '../../../core/models/group.model';
 

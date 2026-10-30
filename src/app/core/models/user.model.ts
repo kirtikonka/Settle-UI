@@ -7,6 +7,6 @@ export interface User {
 }
 
 export interface Friend extends User {
-  balance: number; // positive: they owe you, negative: you owe them, 0: settled
+  balance: number;
   lastActivityDate?: string;
 }

@@ -125,8 +125,8 @@
                 <span class="material-symbols-outlined check-icon">check_circle</span>
                 <div class="set-info">
                   <span class="set-title">
-                    {{ set.fromUserId === splitwiseService.currentUser().id ? 'You' : currentFriend.name }} paid
-                    {{ set.toUserId === splitwiseService.currentUser().id ? 'You' : currentFriend.name }}
+                    {{ set.fromUserId === settleService.currentUser().id ? 'You' : currentFriend.name }} paid
+                    {{ set.toUserId === settleService.currentUser().id ? 'You' : currentFriend.name }}
                   </span>
                   <span class="set-date">{{ set.date }} &bull; Via {{ set.paymentMethod || 'Payment' }}</span>
                 </div>

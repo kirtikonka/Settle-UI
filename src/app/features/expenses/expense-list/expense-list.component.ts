@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../../core/services/splitwise.service';
+import { SettleService } from '../../../core/services/settle.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { Expense, ExpenseCategory } from '../../../core/models/expense.model';
 
@@ -14,7 +14,7 @@ import { Expense, ExpenseCategory } from '../../../core/models/expense.model';
   styleUrl: './expense-list.component.scss',
 })
 export class ExpenseListComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
   searchQuery = signal<string>('');
@@ -22,10 +22,10 @@ export class ExpenseListComponent {
   selectedGroupId = signal<string>('all');
   sortBy = signal<string>('date-desc');
 
-  readonly currency = this.splitwiseService.currency;
+  readonly currency = this.settleService.currency;
 
   readonly filteredExpenses = computed<Expense[]>(() => {
-    let list = [...this.splitwiseService.expenses()];
+    let list = [...this.settleService.expenses()];
     const q = this.searchQuery().toLowerCase().trim();
     const cat = this.selectedCategory();
     const grp = this.selectedGroupId();
@@ -60,20 +60,20 @@ export class ExpenseListComponent {
 
   deleteExpense(id: string): void {
     if (confirm('Are you sure you want to delete this expense?')) {
-      this.splitwiseService.deleteExpense(id);
+      this.settleService.deleteExpense(id);
     }
   }
 
   getGroupName(groupId: string): string {
-    return this.splitwiseService.groups().find((g) => g.id === groupId)?.name || 'Group';
+    return this.settleService.groups().find((g) => g.id === groupId)?.name || 'Group';
   }
 
   getPayerName(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const firstPayer = exp.paidBy[0];
     if (!firstPayer) return 'Unknown';
     if (firstPayer.userId === me.id) return 'you';
-    return this.splitwiseService.getUserById(firstPayer.userId)?.name || 'Someone';
+    return this.settleService.getUserById(firstPayer.userId)?.name || 'Someone';
   }
 
   getCategoryEmoji(category: ExpenseCategory): string {
@@ -91,7 +91,7 @@ export class ExpenseListComponent {
   }
 
   getShareClass(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 
@@ -101,7 +101,7 @@ export class ExpenseListComponent {
   }
 
   getShareLabel(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 
@@ -111,7 +111,7 @@ export class ExpenseListComponent {
   }
 
   getShareAmountText(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 

@@ -15,43 +15,43 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
-        title: 'Dashboard — SettleWise',
+        title: 'Dashboard — Settle',
       },
       {
         path: 'groups',
         loadComponent: () =>
           import('./features/groups/group-list/group-list.component').then((m) => m.GroupListComponent),
-        title: 'Groups — SettleWise',
+        title: 'Groups — Settle',
       },
       {
         path: 'groups/:id',
         loadComponent: () =>
           import('./features/groups/group-detail/group-detail.component').then((m) => m.GroupDetailComponent),
-        title: 'Group Details — SettleWise',
+        title: 'Group Details — Settle',
       },
       {
         path: 'friends',
         loadComponent: () =>
           import('./features/friends/friend-list/friend-list.component').then((m) => m.FriendListComponent),
-        title: 'Friends — SettleWise',
+        title: 'Friends — Settle',
       },
       {
         path: 'friends/:id',
         loadComponent: () =>
           import('./features/friends/friend-detail/friend-detail.component').then((m) => m.FriendDetailComponent),
-        title: 'Friend Details — SettleWise',
+        title: 'Friend Details — Settle',
       },
       {
         path: 'activity',
         loadComponent: () =>
           import('./features/activity/activity.component').then((m) => m.ActivityComponent),
-        title: 'Recent Activity — SettleWise',
+        title: 'Recent Activity — Settle',
       },
       {
         path: 'expenses',
         loadComponent: () =>
           import('./features/expenses/expense-list/expense-list.component').then((m) => m.ExpenseListComponent),
-        title: 'All Expenses — SettleWise',
+        title: 'All Expenses — Settle',
       },
     ],
   },

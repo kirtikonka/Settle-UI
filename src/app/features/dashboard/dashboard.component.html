@@ -18,9 +18,7 @@
     </div>
   </div>
 
-  <!-- Hero Balances Grid -->
   <div class="balance-cards-grid">
-    <!-- Total Balance -->
     <div class="balance-card">
       <span class="card-label">Total Balance</span>
       <div class="card-amount" [class.amount-lent]="netBalance() > 0" [class.amount-owed]="netBalance() < 0" [class.amount-settled]="netBalance() === 0">
@@ -43,7 +41,6 @@
       </span>
     </div>
 
-    <!-- You Are Owed -->
     <div class="balance-card">
       <span class="card-label">You Are Owed</span>
       <div class="card-amount amount-lent">

@@ -32,7 +32,7 @@ export interface Expense {
   category: ExpenseCategory;
   date: string;
   notes?: string;
-  groupId?: string; // If null/empty, it's a direct friend expense
+  groupId?: string;
   paidBy: ExpensePayer[];
   splits: ExpenseSplit[];
   splitType: SplitType;

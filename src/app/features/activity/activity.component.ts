@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../core/services/splitwise.service';
+import { SettleService } from '../../core/services/settle.service';
 import { ActivityItem, ActivityType } from '../../core/models/activity.model';
 
 type ActivityFilter = 'all' | 'expense' | 'settlement' | 'group';
@@ -14,11 +14,11 @@ type ActivityFilter = 'all' | 'expense' | 'settlement' | 'group';
   styleUrl: './activity.component.scss',
 })
 export class ActivityComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly filter = signal<ActivityFilter>('all');
 
   readonly filteredActivities = computed<ActivityItem[]>(() => {
-    const list = this.splitwiseService.recentActivities();
+    const list = this.settleService.recentActivities();
     const f = this.filter();
 
     if (f === 'all') return list;

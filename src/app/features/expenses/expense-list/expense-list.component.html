@@ -39,7 +39,7 @@
 
       <select [(ngModel)]="selectedGroupId" class="filter-select">
         <option value="all">All Groups</option>
-        @for (group of splitwiseService.groups(); track group.id) {
+        @for (group of settleService.groups(); track group.id) {
           <option [value]="group.id">{{ group.name }}</option>
         }
       </select>

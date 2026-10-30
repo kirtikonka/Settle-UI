@@ -1,7 +1,7 @@
 export interface Settlement {
   id: string;
-  fromUserId: string; // The person who paid
-  toUserId: string;   // The person who received
+  fromUserId: string;
+  toUserId: string;
   amount: number;
   date: string;
   notes?: string;

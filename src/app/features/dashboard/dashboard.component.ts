@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AvatarComponent } from '../../shared/components/avatar/avatar.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
-import { SplitwiseService } from '../../core/services/splitwise.service';
+import { SettleService } from '../../core/services/settle.service';
 import { ModalService } from '../../core/services/modal.service';
 import { Friend } from '../../core/models/user.model';
 import { Expense } from '../../core/models/expense.model';
@@ -16,21 +16,21 @@ import { Expense } from '../../core/models/expense.model';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  readonly splitwiseService = inject(SplitwiseService);
+  readonly settleService = inject(SettleService);
   readonly modalService = inject(ModalService);
 
-  readonly netBalance = this.splitwiseService.netBalance;
-  readonly totalOwedToYou = this.splitwiseService.totalOwedToYou;
-  readonly totalYouOwe = this.splitwiseService.totalYouOwe;
-  readonly currency = this.splitwiseService.currency;
-  readonly recentExpenses = this.splitwiseService.recentExpenses;
+  readonly netBalance = this.settleService.netBalance;
+  readonly totalOwedToYou = this.settleService.totalOwedToYou;
+  readonly totalYouOwe = this.settleService.totalYouOwe;
+  readonly currency = this.settleService.currency;
+  readonly recentExpenses = this.settleService.recentExpenses;
 
   readonly friendsWhoOweMe = computed<Friend[]>(() =>
-    this.splitwiseService.friends().filter((f) => f.balance > 0)
+    this.settleService.friends().filter((f) => f.balance > 0)
   );
 
   readonly friendsIOwe = computed<Friend[]>(() =>
-    this.splitwiseService.friends().filter((f) => f.balance < 0)
+    this.settleService.friends().filter((f) => f.balance < 0)
   );
 
   openAddExpense(): void {
@@ -47,20 +47,20 @@ export class DashboardComponent {
 
   deleteExpense(id: string): void {
     if (confirm('Are you sure you want to delete this expense?')) {
-      this.splitwiseService.deleteExpense(id);
+      this.settleService.deleteExpense(id);
     }
   }
 
   getGroupName(groupId: string): string {
-    return this.splitwiseService.groups().find((g) => g.id === groupId)?.name || 'Group';
+    return this.settleService.groups().find((g) => g.id === groupId)?.name || 'Group';
   }
 
   getPayerName(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const firstPayer = exp.paidBy[0];
     if (!firstPayer) return 'Unknown';
     if (firstPayer.userId === me.id) return 'you';
-    return this.splitwiseService.getUserById(firstPayer.userId)?.name || 'Someone';
+    return this.settleService.getUserById(firstPayer.userId)?.name || 'Someone';
   }
 
   getCategoryEmoji(category: string): string {
@@ -78,7 +78,7 @@ export class DashboardComponent {
   }
 
   getShareClass(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 
@@ -88,7 +88,7 @@ export class DashboardComponent {
   }
 
   getShareLabel(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 
@@ -98,7 +98,7 @@ export class DashboardComponent {
   }
 
   getShareAmountText(exp: Expense): string {
-    const me = this.splitwiseService.currentUser();
+    const me = this.settleService.currentUser();
     const paidByMe = exp.paidBy.find((p) => p.userId === me.id)?.amount || 0;
     const myShare = exp.splits.find((s) => s.userId === me.id && s.isIncluded)?.amount || 0;
 

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { ModalService } from '../../../core/services/modal.service';
-import { SplitwiseService } from '../../../core/services/splitwise.service';
+import { SplitwiseService } from '../../../core/services/settle.service';
 import { ExpenseCategory, ExpensePayer, ExpenseSplit, SplitType } from '../../../core/models/expense.model';
 import { User } from '../../../core/models/user.model';
 
