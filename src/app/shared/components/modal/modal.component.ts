@@ -1,0 +1,150 @@
+import { Component, input, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-modal',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    @if (isOpen()) {
+      <div class="modal-backdrop" (click)="onBackdropClick($event)">
+        <div class="modal-card" [style.max-width]="maxWidth()">
+          <div class="modal-header">
+            <div class="modal-title-wrap">
+              @if (icon()) {
+                <span class="material-symbols-outlined modal-icon">{{ icon() }}</span>
+              }
+              <h3>{{ title() }}</h3>
+            </div>
+            <button class="close-btn" (click)="close.emit()" title="Close">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <ng-content select="[body]"></ng-content>
+          </div>
+
+          <div class="modal-footer">
+            <ng-content select="[footer]"></ng-content>
+          </div>
+        </div>
+      </div>
+    }
+  `,
+  styles: [`
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+
+      .modal-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+
+        .modal-icon {
+          color: var(--primary);
+          font-size: 1.5rem;
+        }
+
+        h3 {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: var(--text-main);
+        }
+      }
+
+      .close-btn {
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem;
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+
+        &:hover {
+          color: var(--text-main);
+          background-color: var(--bg-surface-secondary);
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-light);
+      background-color: var(--bg-surface-secondary);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleUp {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+  `],
+})
+export class ModalComponent {
+  isOpen = input<boolean>(false);
+  title = input<string>('Modal');
+  icon = input<string | undefined>();
+  maxWidth = input<string>('540px');
+
+  close = output<void>();
+
+  onBackdropClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
+      this.close.emit();
+    }
+  }
+}
