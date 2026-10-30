@@ -1,0 +1,87 @@
+<div class="activity-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Recent Activity</h1>
+      <p class="page-subtitle">A real-time timeline of shared expenses, settlements, and group updates</p>
+    </div>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="filters-card card">
+    <div class="filter-chips">
+      <button
+        class="chip-btn"
+        [class.active]="filter() === 'all'"
+        (click)="filter.set('all')"
+      >
+        All Activity
+      </button>
+      <button
+        class="chip-btn"
+        [class.active]="filter() === 'expense'"
+        (click)="filter.set('expense')"
+      >
+        Expenses Only
+      </button>
+      <button
+        class="chip-btn"
+        [class.active]="filter() === 'settlement'"
+        (click)="filter.set('settlement')"
+      >
+        Payments & Settlements
+      </button>
+      <button
+        class="chip-btn"
+        [class.active]="filter() === 'group'"
+        (click)="filter.set('group')"
+      >
+        Groups & Friends
+      </button>
+    </div>
+  </div>
+
+  <!-- Activity Timeline -->
+  @if (filteredActivities().length > 0) {
+    <div class="timeline-container card">
+      <div class="timeline-list">
+        @for (item of filteredActivities(); track item.id) {
+          <div class="timeline-item">
+            <div class="timeline-icon-box" [ngClass]="getActivityIconClass(item.type)">
+              <span class="material-symbols-outlined">{{ getActivityIcon(item.type) }}</span>
+            </div>
+
+            <div class="timeline-content">
+              <div class="timeline-header-row">
+                <span class="activity-title">{{ item.title }}</span>
+                <span class="activity-time">{{ formatTime(item.timestamp) }}</span>
+              </div>
+
+              @if (item.description || item.groupName) {
+                <div class="activity-meta">
+                  @if (item.groupName) {
+                    <span class="group-tag">In {{ item.groupName }}</span>
+                  }
+                  @if (item.description) {
+                    <span class="item-desc">{{ item.description }}</span>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (item.amount) {
+              <div class="timeline-amount-box">
+                <span class="amount-val">{{ splitwiseService.currency() }} {{ item.amount.toFixed(2) }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <app-empty-state
+      icon="history"
+      title="No recent activity"
+      description="Actions like adding expenses, paying debts, and creating groups will appear here."
+    ></app-empty-state>
+  }
+</div>

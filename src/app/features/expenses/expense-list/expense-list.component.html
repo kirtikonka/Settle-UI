@@ -1,0 +1,113 @@
+<div class="all-expenses-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">All Expenses</h1>
+      <p class="page-subtitle">Complete ledger of shared expenses across all friends and groups</p>
+    </div>
+
+    <button class="btn btn-primary" (click)="openAddExpense()">
+      <span class="material-symbols-outlined">add</span>
+      Add an expense
+    </button>
+  </div>
+
+  <!-- Search & Filters Toolbar -->
+  <div class="toolbar-card card">
+    <div class="search-input-wrap">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search expenses by title..."
+        class="search-input"
+      />
+    </div>
+
+    <div class="filters-row">
+      <select [(ngModel)]="selectedCategory" class="filter-select">
+        <option value="all">All Categories</option>
+        <option value="food">🍽️ Food & Dining</option>
+        <option value="groceries">🛒 Groceries</option>
+        <option value="travel">✈️ Travel</option>
+        <option value="transport">🚕 Transport</option>
+        <option value="entertainment">🎟️ Entertainment</option>
+        <option value="utilities">💡 Utilities</option>
+        <option value="rent">🏠 Rent</option>
+        <option value="shopping">🛍️ Shopping</option>
+        <option value="general">📦 General</option>
+      </select>
+
+      <select [(ngModel)]="selectedGroupId" class="filter-select">
+        <option value="all">All Groups</option>
+        @for (group of splitwiseService.groups(); track group.id) {
+          <option [value]="group.id">{{ group.name }}</option>
+        }
+      </select>
+
+      <select [(ngModel)]="sortBy" class="filter-select">
+        <option value="date-desc">Newest First</option>
+        <option value="date-asc">Oldest First</option>
+        <option value="amount-desc">Highest Amount</option>
+        <option value="amount-asc">Lowest Amount</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Expenses Ledger -->
+  @if (filteredExpenses().length > 0) {
+    <div class="expenses-container card">
+      <div class="expenses-table-header">
+        <span class="col-title">Description</span>
+        <span class="col-cost">Total Cost</span>
+        <span class="col-share">Your Share</span>
+        <span class="col-actions"></span>
+      </div>
+
+      <div class="expenses-list">
+        @for (exp of filteredExpenses(); track exp.id) {
+          <div class="expense-row">
+            <div class="expense-left">
+              <div class="category-icon-box">
+                <span>{{ getCategoryEmoji(exp.category) }}</span>
+              </div>
+              <div class="expense-meta">
+                <span class="expense-title">{{ exp.title }}</span>
+                <span class="expense-sub">
+                  {{ exp.date }} &bull;
+                  @if (exp.groupId) {
+                    In <strong>{{ getGroupName(exp.groupId) }}</strong> &bull;
+                  }
+                  Paid by {{ getPayerName(exp) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="expense-right">
+              <div class="expense-cost">
+                <span class="cost-value">{{ currency() }} {{ exp.amount.toFixed(2) }}</span>
+              </div>
+
+              <div class="expense-share" [ngClass]="getShareClass(exp)">
+                <span class="share-label">{{ getShareLabel(exp) }}</span>
+                <span class="share-value">{{ getShareAmountText(exp) }}</span>
+              </div>
+
+              <button class="delete-btn" (click)="deleteExpense(exp.id)" title="Delete expense">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <app-empty-state
+      icon="receipt_long"
+      title="No expenses match your filters"
+      description="Try adjusting your search criteria or add a new expense."
+      actionLabel="Add Expense"
+      actionIcon="add"
+      (actionClicked)="openAddExpense()"
+    ></app-empty-state>
+  }
+</div>

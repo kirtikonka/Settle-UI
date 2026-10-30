@@ -1,0 +1,129 @@
+<app-modal
+  [isOpen]="modalService.isSettleUpOpen()"
+  title="Settle Up"
+  icon="handshake"
+  maxWidth="500px"
+  (close)="close()"
+>
+  <div body class="settle-form">
+    <!-- Relationship selector -->
+    <div class="settle-participant-card">
+      <div class="participant-side">
+        <app-avatar [src]="getPayerUser()?.avatarUrl" [name]="getPayerUser()?.name || 'Payer'" size="md"></app-avatar>
+        <span class="user-role-label">Payer</span>
+        <span class="user-name-label">{{ getPayerUser()?.name }}</span>
+      </div>
+
+      <div class="arrow-wrap">
+        <button type="button" class="swap-direction-btn" (click)="swapDirection()" title="Swap direction">
+          <span class="material-symbols-outlined">sync_alt</span>
+        </button>
+      </div>
+
+      <div class="participant-side">
+        <app-avatar [src]="getReceiverUser()?.avatarUrl" [name]="getReceiverUser()?.name || 'Receiver'" size="md"></app-avatar>
+        <span class="user-role-label">Receiver</span>
+        <span class="user-name-label">{{ getReceiverUser()?.name }}</span>
+      </div>
+    </div>
+
+    <!-- Friend Selector if multiple -->
+    <div class="form-group">
+      <label class="form-label">Settle with friend:</label>
+      <select [ngModel]="selectedFriendId()" (ngModelChange)="onFriendChange($event)" class="form-control">
+        @for (friend of splitwiseService.friends(); track friend.id) {
+          <option [value]="friend.id">
+            {{ friend.name }}
+            @if (friend.balance > 0) {
+              (Owes you {{ splitwiseService.currency() }} {{ friend.balance.toFixed(2) }})
+            } @else if (friend.balance < 0) {
+              (You owe {{ splitwiseService.currency() }} {{ (-friend.balance).toFixed(2) }})
+            } @else {
+              (Settled up)
+            }
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- Direction toggle (I paid them vs They paid me) -->
+    <div class="direction-toggle-group">
+      <button
+        type="button"
+        class="direction-btn"
+        [class.active]="direction() === 'ME_PAID_THEM'"
+        (click)="setDirection('ME_PAID_THEM')"
+      >
+        You paid {{ getFriend()?.name }}
+      </button>
+      <button
+        type="button"
+        class="direction-btn"
+        [class.active]="direction() === 'THEY_PAID_ME'"
+        (click)="setDirection('THEY_PAID_ME')"
+      >
+        {{ getFriend()?.name }} paid you
+      </button>
+    </div>
+
+    <!-- Amount -->
+    <div class="form-group">
+      <label class="form-label">Amount ({{ splitwiseService.currency() }})</label>
+      <div class="amount-container">
+        <span class="currency-prefix">{{ splitwiseService.currency() }}</span>
+        <input
+          type="number"
+          min="0.01"
+          step="0.01"
+          [(ngModel)]="amount"
+          placeholder="0.00"
+          class="form-control amount-field"
+        />
+      </div>
+    </div>
+
+    <!-- Payment Method & Date -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label class="form-label">Payment Method</label>
+        <select [(ngModel)]="paymentMethod" class="form-control">
+          <option value="cash">💵 Cash</option>
+          <option value="upi">⚡ UPI / Instant Pay</option>
+          <option value="venmo">📱 Venmo</option>
+          <option value="paypal">💳 PayPal</option>
+          <option value="bank_transfer">🏦 Bank Transfer</option>
+          <option value="other">📝 Other</option>
+        </select>
+      </div>
+
+      <div class="form-group flex-1">
+        <label class="form-label">Date</label>
+        <input type="date" [(ngModel)]="date" class="form-control" />
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="form-group">
+      <label class="form-label">Notes (optional)</label>
+      <input
+        type="text"
+        [(ngModel)]="notes"
+        placeholder="e.g. Settle up for trip dinner"
+        class="form-control"
+      />
+    </div>
+  </div>
+
+  <div footer>
+    <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!isValid()"
+      (click)="recordSettlement()"
+    >
+      <span class="material-symbols-outlined">payments</span>
+      Record Payment
+    </button>
+  </div>
+</app-modal>

@@ -5,66 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-avatar',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div
-      class="avatar-container"
-      [class.size-sm]="size() === 'sm'"
-      [class.size-md]="size() === 'md'"
-      [class.size-lg]="size() === 'lg'"
-      [class.size-xl]="size() === 'xl'"
-      [style.background-color]="bgColor()"
-    >
-      @if (src()) {
-        <img [src]="src()" [alt]="name()" (error)="onImgError()" />
-      } @else {
-        <span class="initials">{{ initials() }}</span>
-      }
-    </div>
-  `,
-  styles: [`
-    .avatar-container {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 9999px;
-      overflow: hidden;
-      flex-shrink: 0;
-      user-select: none;
-      font-weight: 700;
-      color: #ffffff;
-      background: #1cc29f;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      &.size-sm {
-        width: 28px;
-        height: 28px;
-        font-size: 0.75rem;
-      }
-
-      &.size-md {
-        width: 38px;
-        height: 38px;
-        font-size: 0.9rem;
-      }
-
-      &.size-lg {
-        width: 50px;
-        height: 50px;
-        font-size: 1.15rem;
-      }
-
-      &.size-xl {
-        width: 68px;
-        height: 68px;
-        font-size: 1.5rem;
-      }
-    }
-  `],
+  templateUrl: './avatar.component.html',
+  styleUrl: './avatar.component.scss',
 })
 export class AvatarComponent {
   src = input<string | undefined>();

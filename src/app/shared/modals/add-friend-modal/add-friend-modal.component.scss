@@ -1,0 +1,35 @@
+.add-friend-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .input-icon {
+    position: absolute;
+    left: 0.75rem;
+    color: var(--text-subtle);
+    font-size: 1.25rem;
+    pointer-events: none;
+  }
+
+  input {
+    padding-left: 2.5rem;
+  }
+}

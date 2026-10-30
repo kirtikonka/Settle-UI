@@ -1,0 +1,153 @@
+@if (friend(); as currentFriend) {
+  <div class="friend-detail-page">
+    <!-- Top Back Nav -->
+    <div class="top-nav">
+      <a routerLink="/friends" class="back-link">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Back to Friends
+      </a>
+    </div>
+
+    <!-- Friend Hero Card -->
+    <div class="friend-hero card">
+      <div class="hero-left">
+        <app-avatar [src]="currentFriend.avatarUrl" [name]="currentFriend.name" size="xl"></app-avatar>
+        <div class="friend-meta">
+          <h1 class="friend-name">{{ currentFriend.name }}</h1>
+          <span class="friend-email">{{ currentFriend.email }}</span>
+          @if (currentFriend.phone) {
+            <span class="friend-phone">{{ currentFriend.phone }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-balance-box" [ngClass]="balanceClass(currentFriend.balance)">
+          <span class="status-label">Current Balance</span>
+          <div class="status-amount">
+            @if (currentFriend.balance > 0.01) {
+              {{ currentFriend.name }} owes you {{ currency() }} {{ currentFriend.balance.toFixed(2) }}
+            } @else if (currentFriend.balance < -0.01) {
+              You owe {{ currentFriend.name }} {{ currency() }} {{ (-currentFriend.balance).toFixed(2) }}
+            } @else {
+              You and {{ currentFriend.name }} are settled up
+            }
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" (click)="openAddExpense(currentFriend.id)">
+            <span class="material-symbols-outlined">add</span>
+            Add Expense
+          </button>
+          <button class="btn btn-secondary" (click)="openSettleUp(currentFriend.id)">
+            <span class="material-symbols-outlined">payments</span>
+            Settle Up
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared Expenses List -->
+    <div class="shared-section card">
+      <div class="section-header">
+        <div class="header-title-wrap">
+          <span class="material-symbols-outlined header-icon">receipt_long</span>
+          <h3>Shared Expenses with {{ currentFriend.name }}</h3>
+        </div>
+        <span class="count-badge">{{ sharedExpenses().length }} expenses</span>
+      </div>
+
+      @if (sharedExpenses().length > 0) {
+        <div class="expenses-list">
+          @for (exp of sharedExpenses(); track exp.id) {
+            <div class="expense-row">
+              <div class="expense-left">
+                <div class="category-icon-box">
+                  <span>{{ getCategoryEmoji(exp.category) }}</span>
+                </div>
+                <div class="expense-meta">
+                  <span class="expense-title">{{ exp.title }}</span>
+                  <span class="expense-sub">
+                    {{ exp.date }} &bull;
+                    @if (exp.groupId) {
+                      In {{ getGroupName(exp.groupId) }} &bull;
+                    }
+                    Paid by {{ getPayerName(exp) }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="expense-right">
+                <div class="expense-cost">
+                  <span class="cost-label">Total</span>
+                  <span class="cost-value">{{ currency() }} {{ exp.amount.toFixed(2) }}</span>
+                </div>
+
+                <div class="expense-share" [ngClass]="getShareClass(exp)">
+                  <span class="share-label">{{ getShareLabel(exp) }}</span>
+                  <span class="share-value">{{ getShareAmountText(exp) }}</span>
+                </div>
+
+                <button class="delete-btn" (click)="deleteExpense(exp.id)" title="Delete expense">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <app-empty-state
+          icon="receipt_long"
+          title="No shared expenses"
+          description="You and this friend haven't split any bills yet."
+          actionLabel="Add Expense"
+          actionIcon="add"
+          (actionClicked)="openAddExpense(currentFriend.id)"
+        ></app-empty-state>
+      }
+    </div>
+
+    <!-- Settlement History -->
+    @if (settlements().length > 0) {
+      <div class="settlements-section card">
+        <div class="section-header">
+          <div class="header-title-wrap">
+            <span class="material-symbols-outlined header-icon">handshake</span>
+            <h3>Settlement History</h3>
+          </div>
+        </div>
+
+        <div class="settlements-list">
+          @for (set of settlements(); track set.id) {
+            <div class="settlement-row">
+              <div class="set-left">
+                <span class="material-symbols-outlined check-icon">check_circle</span>
+                <div class="set-info">
+                  <span class="set-title">
+                    {{ set.fromUserId === splitwiseService.currentUser().id ? 'You' : currentFriend.name }} paid
+                    {{ set.toUserId === splitwiseService.currentUser().id ? 'You' : currentFriend.name }}
+                  </span>
+                  <span class="set-date">{{ set.date }} &bull; Via {{ set.paymentMethod || 'Payment' }}</span>
+                </div>
+              </div>
+
+              <div class="set-right">
+                <span class="set-amount">{{ currency() }} {{ set.amount.toFixed(2) }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <app-empty-state
+    icon="person_off"
+    title="Friend not found"
+    description="The friend profile you requested does not exist."
+    actionLabel="Go to Friends"
+    actionIcon="arrow_back"
+    (actionClicked)="router.navigate(['/friends'])"
+  ></app-empty-state>
+}

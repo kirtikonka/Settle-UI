@@ -1,0 +1,14 @@
+<div
+  class="avatar-container"
+  [class.size-sm]="size() === 'sm'"
+  [class.size-md]="size() === 'md'"
+  [class.size-lg]="size() === 'lg'"
+  [class.size-xl]="size() === 'xl'"
+  [style.background-color]="bgColor()"
+>
+  @if (src()) {
+    <img [src]="src()" [alt]="name()" (error)="onImgError()" />
+  } @else {
+    <span class="initials">{{ initials() }}</span>
+  }
+</div>

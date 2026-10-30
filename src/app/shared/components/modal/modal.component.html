@@ -1,0 +1,25 @@
+@if (isOpen()) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-card" [style.max-width]="maxWidth()">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          @if (icon()) {
+            <span class="material-symbols-outlined modal-icon">{{ icon() }}</span>
+          }
+          <h3>{{ title() }}</h3>
+        </div>
+        <button class="close-btn" (click)="close.emit()" title="Close">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <ng-content select="[body]"></ng-content>
+      </div>
+
+      <div class="modal-footer">
+        <ng-content select="[footer]"></ng-content>
+      </div>
+    </div>
+  </div>
+}

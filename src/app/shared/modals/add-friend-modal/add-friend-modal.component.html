@@ -1,0 +1,61 @@
+<app-modal
+  [isOpen]="modalService.isAddFriendOpen()"
+  title="Add a Friend"
+  icon="person_add"
+  maxWidth="450px"
+  (close)="close()"
+>
+  <div body class="add-friend-form">
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <div class="input-with-icon">
+        <span class="material-symbols-outlined input-icon">person</span>
+        <input
+          type="text"
+          [(ngModel)]="name"
+          placeholder="e.g. John Watson"
+          class="form-control"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <div class="input-with-icon">
+        <span class="material-symbols-outlined input-icon">mail</span>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          placeholder="e.g. john@example.com"
+          class="form-control"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Phone Number (optional)</label>
+      <div class="input-with-icon">
+        <span class="material-symbols-outlined input-icon">call</span>
+        <input
+          type="tel"
+          [(ngModel)]="phone"
+          placeholder="e.g. +1 555-0123"
+          class="form-control"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div footer>
+    <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!isValid()"
+      (click)="saveFriend()"
+    >
+      <span class="material-symbols-outlined">person_add</span>
+      Add Friend
+    </button>
+  </div>
+</app-modal>

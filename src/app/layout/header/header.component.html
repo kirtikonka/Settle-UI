@@ -1,0 +1,52 @@
+<header class="app-header">
+  <div class="header-left">
+    <a routerLink="/dashboard" class="brand-logo">
+      <div class="logo-icon">
+        <span class="material-symbols-outlined">account_balance_wallet</span>
+      </div>
+      <span class="brand-name">Settle<span class="highlight">Wise</span></span>
+    </a>
+  </div>
+
+  <div class="header-center">
+    <!-- Quick search or status info -->
+    <div class="quick-status">
+      <span class="status-indicator"></span>
+      <span>Synced locally</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <!-- Currency Selector -->
+    <div class="currency-toggle">
+      <select [value]="splitwiseService.currency()" (change)="onCurrencyChange($event)" class="currency-select" title="Change Currency">
+        <option value="USD">$ USD</option>
+        <option value="EUR">€ EUR</option>
+        <option value="GBP">£ GBP</option>
+        <option value="INR">₹ INR</option>
+      </select>
+    </div>
+
+    <!-- Reset Demo Data -->
+    <button class="btn btn-outline btn-sm reset-btn" (click)="resetData()" title="Reset mock data to initial demo state">
+      <span class="material-symbols-outlined">restart_alt</span>
+      <span class="btn-text">Reset Demo</span>
+    </button>
+
+    <!-- Quick Add Expense -->
+    <button class="btn btn-primary btn-sm" (click)="openAddExpense()">
+      <span class="material-symbols-outlined">add</span>
+      <span>Add Expense</span>
+    </button>
+
+    <!-- User Profile -->
+    <div class="user-pill">
+      <app-avatar
+        [src]="splitwiseService.currentUser().avatarUrl"
+        [name]="splitwiseService.currentUser().name"
+        size="sm"
+      ></app-avatar>
+      <span class="user-name">{{ splitwiseService.currentUser().name }}</span>
+    </div>
+  </div>
+</header>

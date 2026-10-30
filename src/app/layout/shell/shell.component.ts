@@ -21,55 +21,7 @@ import { AddFriendModalComponent } from '../../shared/modals/add-friend-modal/ad
     CreateGroupModalComponent,
     AddFriendModalComponent,
   ],
-  template: `
-    <div class="app-layout">
-      <app-header></app-header>
-
-      <div class="app-body">
-        <app-sidebar class="app-sidebar-pane"></app-sidebar>
-
-        <main class="main-content-pane">
-          <router-outlet></router-outlet>
-        </main>
-      </div>
-
-      <!-- Global Modals -->
-      <app-add-expense-modal></app-add-expense-modal>
-      <app-settle-up-modal></app-settle-up-modal>
-      <app-create-group-modal></app-create-group-modal>
-      <app-add-friend-modal></app-add-friend-modal>
-    </div>
-  `,
-  styles: [`
-    .app-layout {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-color: var(--bg-app);
-    }
-
-    .app-body {
-      display: flex;
-      flex: 1;
-      width: 100%;
-      max-width: 1440px;
-      margin: 0 auto;
-    }
-
-    .app-sidebar-pane {
-      flex-shrink: 0;
-    }
-
-    .main-content-pane {
-      flex: 1;
-      min-width: 0;
-      padding: 1.5rem 2rem;
-      overflow-y: auto;
-
-      @media (max-width: 768px) {
-        padding: 1rem;
-      }
-    }
-  `],
+  templateUrl: './shell.component.html',
+  styleUrl: './shell.component.scss',
 })
 export class ShellComponent {}

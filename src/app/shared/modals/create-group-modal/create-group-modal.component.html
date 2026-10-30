@@ -1,0 +1,98 @@
+<app-modal
+  [isOpen]="modalService.isCreateGroupOpen()"
+  title="Create New Group"
+  icon="group_add"
+  maxWidth="500px"
+  (close)="close()"
+>
+  <div body class="create-group-form">
+    <div class="form-group">
+      <label class="form-label">Group Name</label>
+      <input
+        type="text"
+        [(ngModel)]="name"
+        placeholder="e.g. Summer Euro Trip, House 204"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Type / Category</label>
+      <div class="category-grid">
+        <button
+          type="button"
+          class="cat-chip"
+          [class.active]="category === 'trip'"
+          (click)="category = 'trip'"
+        >
+          <span>✈️</span> Trip / Vacation
+        </button>
+        <button
+          type="button"
+          class="cat-chip"
+          [class.active]="category === 'home'"
+          (click)="category = 'home'"
+        >
+          <span>🏠</span> Home / Flatmates
+        </button>
+        <button
+          type="button"
+          class="cat-chip"
+          [class.active]="category === 'couple'"
+          (click)="category = 'couple'"
+        >
+          <span>❤️</span> Couple
+        </button>
+        <button
+          type="button"
+          class="cat-chip"
+          [class.active]="category === 'other'"
+          (click)="category = 'other'"
+        >
+          <span>✨</span> Other
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Add Members (from Friends):</label>
+      <div class="friends-selection-list">
+        <div class="friend-item current-user-item">
+          <input type="checkbox" checked disabled />
+          <app-avatar [src]="splitwiseService.currentUser().avatarUrl" [name]="splitwiseService.currentUser().name" size="sm"></app-avatar>
+          <span class="user-name">{{ splitwiseService.currentUser().name }} (You)</span>
+        </div>
+
+        @for (friend of splitwiseService.friends(); track friend.id) {
+          <div
+            class="friend-item"
+            [class.selected]="selectedFriendIds.has(friend.id)"
+            (click)="toggleFriend(friend.id)"
+          >
+            <input
+              type="checkbox"
+              [checked]="selectedFriendIds.has(friend.id)"
+              (click)="$event.stopPropagation()"
+              (change)="toggleFriend(friend.id)"
+            />
+            <app-avatar [src]="friend.avatarUrl" [name]="friend.name" size="sm"></app-avatar>
+            <span class="user-name">{{ friend.name }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div footer>
+    <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!name.trim()"
+      (click)="createGroup()"
+    >
+      <span class="material-symbols-outlined">add</span>
+      Create Group
+    </button>
+  </div>
+</app-modal>

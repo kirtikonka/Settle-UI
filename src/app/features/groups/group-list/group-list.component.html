@@ -1,0 +1,63 @@
+<div class="groups-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Groups</h1>
+      <p class="page-subtitle">Manage shared expenses for trips, apartments, and projects</p>
+    </div>
+
+    <button class="btn btn-primary" (click)="openCreateGroup()">
+      <span class="material-symbols-outlined">add</span>
+      Create a group
+    </button>
+  </div>
+
+  @if (splitwiseService.groups().length > 0) {
+    <div class="groups-grid">
+      @for (group of splitwiseService.groups(); track group.id) {
+        <a [routerLink]="['/groups', group.id]" class="group-card card card-hover">
+          <div class="group-card-header">
+            <div class="group-icon-wrap">
+              <span>{{ getCategoryEmoji(group.category) }}</span>
+            </div>
+            <div class="group-title-wrap">
+              <h3 class="group-name">{{ group.name }}</h3>
+              <span class="category-badge">{{ group.category }}</span>
+            </div>
+          </div>
+
+          @if (group.description) {
+            <p class="group-desc">{{ group.description }}</p>
+          }
+
+          <div class="group-card-middle">
+            <div class="members-avatars">
+              @for (member of group.members.slice(0, 4); track member.id) {
+                <app-avatar [src]="member.avatarUrl" [name]="member.name" size="sm"></app-avatar>
+              }
+              @if (group.members.length > 4) {
+                <span class="more-members-pill">+{{ group.members.length - 4 }}</span>
+              }
+            </div>
+            <span class="expense-count">{{ getExpenseCount(group.id) }} expenses</span>
+          </div>
+
+          <div class="group-card-footer">
+            <span class="footer-label">Your Balance:</span>
+            <span class="footer-balance" [ngClass]="getBalanceClass(group.id)">
+              {{ getBalanceText(group.id) }}
+            </span>
+          </div>
+        </a>
+      }
+    </div>
+  } @else {
+    <app-empty-state
+      icon="group"
+      title="No groups created yet"
+      description="Groups are perfect for tracking shared bills on trips, flatmates, or events."
+      actionLabel="Create a group"
+      actionIcon="add"
+      (actionClicked)="openCreateGroup()"
+    ></app-empty-state>
+  }
+</div>

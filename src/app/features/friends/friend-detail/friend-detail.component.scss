@@ -1,0 +1,178 @@
+.friend-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.top-nav {
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: var(--transition);
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    .material-symbols-outlined {
+      font-size: 1.15rem;
+    }
+  }
+}
+
+.friend-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    .friend-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+
+      .friend-name {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+
+      .friend-email, .friend-phone {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+    }
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+
+    .hero-balance-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      .status-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-subtle);
+      }
+
+      .status-amount {
+        font-size: 1.25rem;
+        font-weight: 800;
+      }
+
+      &.lent .status-amount { color: var(--lent-color); }
+      &.owed .status-amount { color: var(--owed-color); }
+      &.settled .status-amount { color: var(--neutral-settled); }
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.65rem;
+    }
+  }
+}
+
+.shared-section, .settlements-section {
+  padding: 1.5rem;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+
+    .header-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .header-icon {
+        color: var(--primary);
+      }
+
+      h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+    }
+
+    .count-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+  }
+}
+
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settlements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .settlement-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface-secondary);
+
+    .set-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .check-icon {
+        color: var(--lent-color);
+        font-size: 1.5rem;
+      }
+
+      .set-info {
+        display: flex;
+        flex-direction: column;
+
+        .set-title {
+          font-weight: 700;
+          font-size: 0.95rem;
+        }
+
+        .set-date {
+          font-size: 0.78rem;
+          color: var(--text-muted);
+        }
+      }
+    }
+
+    .set-amount {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--lent-color);
+    }
+  }
+}

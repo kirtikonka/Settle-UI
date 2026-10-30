@@ -1,0 +1,17 @@
+<div class="app-layout">
+  <app-header></app-header>
+
+  <div class="app-body">
+    <app-sidebar class="app-sidebar-pane"></app-sidebar>
+
+    <main class="main-content-pane">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- Global Modals -->
+  <app-add-expense-modal></app-add-expense-modal>
+  <app-settle-up-modal></app-settle-up-modal>
+  <app-create-group-modal></app-create-group-modal>
+  <app-add-friend-modal></app-add-friend-modal>
+</div>

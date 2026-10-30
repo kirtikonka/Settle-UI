@@ -1,0 +1,232 @@
+<app-modal
+  [isOpen]="modalService.isAddExpenseOpen()"
+  title="Add an Expense"
+  icon="receipt_long"
+  maxWidth="580px"
+  (close)="close()"
+>
+  <div body class="expense-form">
+    <!-- Target Selection (Group or Friend) -->
+    <div class="form-group">
+      <label class="form-label">With you and:</label>
+      <div class="context-selector">
+        <select
+          [ngModel]="selectedContext()"
+          (ngModelChange)="onContextChange($event)"
+          class="form-control"
+        >
+          <optgroup label="Groups">
+            @for (group of splitwiseService.groups(); track group.id) {
+              <option [value]="'group:' + group.id">Group: {{ group.name }}</option>
+            }
+          </optgroup>
+          <optgroup label="Friends (Individual)">
+            @for (friend of splitwiseService.friends(); track friend.id) {
+              <option [value]="'friend:' + friend.id">Friend: {{ friend.name }}</option>
+            }
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <!-- Description & Amount -->
+    <div class="form-row">
+      <div class="form-group flex-2">
+        <label class="form-label">Description</label>
+        <div class="input-with-icon">
+          <span class="material-symbols-outlined input-icon">description</span>
+          <input
+            type="text"
+            [(ngModel)]="title"
+            placeholder="e.g. Dinner with team, Flight tickets"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="form-group flex-1">
+        <label class="form-label">Amount ({{ splitwiseService.currency() }})</label>
+        <div class="input-with-icon">
+          <span class="material-symbols-outlined input-icon">payments</span>
+          <input
+            type="number"
+            min="0.01"
+            step="0.01"
+            [(ngModel)]="amount"
+            (ngModelChange)="onAmountChange()"
+            placeholder="0.00"
+            class="form-control amount-input"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Category & Date -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label class="form-label">Category</label>
+        <select [(ngModel)]="category" class="form-control">
+          <option value="food">🍽️ Food & Dining</option>
+          <option value="groceries">🛒 Groceries</option>
+          <option value="transport">🚕 Transport & Fuel</option>
+          <option value="travel">✈️ Travel & Hotel</option>
+          <option value="entertainment">🎟️ Entertainment</option>
+          <option value="utilities">💡 Utilities & Bills</option>
+          <option value="rent">🏠 Rent</option>
+          <option value="shopping">🛍️ Shopping</option>
+          <option value="general">📦 General</option>
+        </select>
+      </div>
+
+      <div class="form-group flex-1">
+        <label class="form-label">Date</label>
+        <input type="date" [(ngModel)]="date" class="form-control" />
+      </div>
+    </div>
+
+    <!-- Paid By Selector -->
+    <div class="form-group paid-by-section">
+      <label class="form-label">Paid by:</label>
+      <div class="payer-picker">
+        <select [(ngModel)]="selectedPayerId" class="form-control">
+          <option [value]="splitwiseService.currentUser().id">You ({{ splitwiseService.currentUser().name }})</option>
+          @for (member of eligibleMembers(); track member.id) {
+            @if (member.id !== splitwiseService.currentUser().id) {
+              <option [value]="member.id">{{ member.name }}</option>
+            }
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- Split Mode Tabs -->
+    <div class="split-section">
+      <div class="split-header">
+        <label class="form-label">Split Type:</label>
+        <div class="split-tabs">
+          <button
+            type="button"
+            class="split-tab"
+            [class.active]="splitType() === 'EQUAL'"
+            (click)="setSplitType('EQUAL')"
+          >
+            Equally (=)
+          </button>
+          <button
+            type="button"
+            class="split-tab"
+            [class.active]="splitType() === 'EXACT'"
+            (click)="setSplitType('EXACT')"
+          >
+            Exact ($)
+          </button>
+          <button
+            type="button"
+            class="split-tab"
+            [class.active]="splitType() === 'PERCENT'"
+            (click)="setSplitType('PERCENT')"
+          >
+            Percent (%)
+          </button>
+          <button
+            type="button"
+            class="split-tab"
+            [class.active]="splitType() === 'SHARES'"
+            (click)="setSplitType('SHARES')"
+          >
+            Shares (x)
+          </button>
+        </div>
+      </div>
+
+      <!-- Split Members Table -->
+      <div class="split-table">
+        @for (row of splitRows(); track row.user.id; let i = $index) {
+          <div class="split-row" [class.row-excluded]="!row.isIncluded">
+            <div class="member-info">
+              <input
+                type="checkbox"
+                [(ngModel)]="row.isIncluded"
+                (ngModelChange)="recalculateSplits()"
+              />
+              <app-avatar [src]="row.user.avatarUrl" [name]="row.user.name" size="sm"></app-avatar>
+              <span class="member-name">{{ row.user.name }} {{ row.user.id === splitwiseService.currentUser().id ? '(You)' : '' }}</span>
+            </div>
+
+            <div class="split-inputs">
+              @switch (splitType()) {
+                @case ('EQUAL') {
+                  <span class="calculated-amount">
+                    {{ splitwiseService.currency() }} {{ row.amount.toFixed(2) }}
+                  </span>
+                }
+                @case ('EXACT') {
+                  <div class="custom-input-group">
+                    <span>{{ splitwiseService.currency() }}</span>
+                    <input
+                      type="number"
+                      [(ngModel)]="row.amount"
+                      (ngModelChange)="onExactAmountChanged()"
+                      [disabled]="!row.isIncluded"
+                      class="small-input"
+                      step="0.01"
+                    />
+                  </div>
+                }
+                @case ('PERCENT') {
+                  <div class="custom-input-group">
+                    <input
+                      type="number"
+                      [(ngModel)]="row.percentage"
+                      (ngModelChange)="onPercentChanged()"
+                      [disabled]="!row.isIncluded"
+                      class="small-input"
+                      step="1"
+                    />
+                    <span>%</span>
+                    <small class="calculated-hint">({{ splitwiseService.currency() }} {{ row.amount.toFixed(2) }})</small>
+                  </div>
+                }
+                @case ('SHARES') {
+                  <div class="custom-input-group">
+                    <input
+                      type="number"
+                      [(ngModel)]="row.shares"
+                      (ngModelChange)="onSharesChanged()"
+                      [disabled]="!row.isIncluded"
+                      class="small-input"
+                      min="1"
+                      step="1"
+                    />
+                    <span>parts</span>
+                    <small class="calculated-hint">({{ splitwiseService.currency() }} {{ row.amount.toFixed(2) }})</small>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (splitValidationWarning()) {
+        <div class="validation-warning">
+          <span class="material-symbols-outlined">warning</span>
+          <span>{{ splitValidationWarning() }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div footer>
+    <button type="button" class="btn btn-outline" (click)="close()">Cancel</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!isValid()"
+      (click)="saveExpense()"
+    >
+      <span class="material-symbols-outlined">check</span>
+      Save Expense
+    </button>
+  </div>
+</app-modal>

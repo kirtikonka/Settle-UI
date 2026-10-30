@@ -1,0 +1,9 @@
+<span
+  class="badge"
+  [class.badge-lent]="type() === 'lent'"
+  [class.badge-owed]="type() === 'owed'"
+  [class.badge-settled]="type() === 'settled'"
+  [class.badge-primary]="type() === 'primary'"
+>
+  <ng-content></ng-content>
+</span>

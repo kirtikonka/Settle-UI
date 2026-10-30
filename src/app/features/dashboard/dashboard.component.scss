@@ -1,0 +1,213 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dashboard-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .topbar-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+}
+
+.balance-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.balance-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .card-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+
+  .card-amount {
+    font-size: 1.85rem;
+    font-weight: 800;
+  }
+
+  .card-caption {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+}
+
+.relationships-container {
+  overflow: hidden;
+
+  .relationships-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--bg-surface-secondary);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0.85rem 1.5rem;
+
+    h3 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    h3:last-child {
+      padding-left: 1.5rem;
+    }
+  }
+
+  .relationships-body {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    min-height: 180px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .col-divider {
+    width: 1px;
+    background: var(--border-light);
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .relationship-col {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .friend-debt-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .friend-debt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    .friend-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .friend-names {
+        display: flex;
+        flex-direction: column;
+
+        .name-link {
+          font-weight: 700;
+          font-size: 0.95rem;
+          color: var(--text-main);
+
+          &:hover {
+            color: var(--primary);
+            text-decoration: underline;
+          }
+        }
+
+        .owes-text {
+          font-size: 0.82rem;
+          color: var(--text-muted);
+        }
+      }
+    }
+  }
+
+  .column-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-subtle);
+    gap: 0.35rem;
+    padding: 2rem 1rem;
+
+    .material-symbols-outlined {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.recent-expenses-section {
+  padding: 1.25rem 1.5rem;
+
+  .section-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+
+    .header-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .header-icon {
+        color: var(--primary);
+      }
+
+      h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+    }
+
+    .view-all-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

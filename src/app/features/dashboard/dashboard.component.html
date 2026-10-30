@@ -1,0 +1,197 @@
+<div class="dashboard-page">
+  <!-- Top Action Bar -->
+  <div class="dashboard-topbar">
+    <div class="page-title-wrap">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Track, split, and settle expenses effortlessly</p>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="btn btn-primary" (click)="openAddExpense()">
+        <span class="material-symbols-outlined">add</span>
+        Add an expense
+      </button>
+      <button class="btn btn-secondary" (click)="openSettleUp()">
+        <span class="material-symbols-outlined">payments</span>
+        Settle up
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero Balances Grid -->
+  <div class="balance-cards-grid">
+    <!-- Total Balance -->
+    <div class="balance-card">
+      <span class="card-label">Total Balance</span>
+      <div class="card-amount" [class.amount-lent]="netBalance() > 0" [class.amount-owed]="netBalance() < 0" [class.amount-settled]="netBalance() === 0">
+        @if (netBalance() > 0) {
+          +{{ currency() }} {{ netBalance().toFixed(2) }}
+        } @else if (netBalance() < 0) {
+          -{{ currency() }} {{ (-netBalance()).toFixed(2) }}
+        } @else {
+          {{ currency() }} 0.00
+        }
+      </div>
+      <span class="card-caption">
+        @if (netBalance() > 0) {
+          Overall you are owed money
+        } @else if (netBalance() < 0) {
+          Overall you owe money
+        } @else {
+          All settled up!
+        }
+      </span>
+    </div>
+
+    <!-- You Are Owed -->
+    <div class="balance-card">
+      <span class="card-label">You Are Owed</span>
+      <div class="card-amount amount-lent">
+        +{{ currency() }} {{ totalOwedToYou().toFixed(2) }}
+      </div>
+      <span class="card-caption">from {{ friendsWhoOweMe().length }} {{ friendsWhoOweMe().length === 1 ? 'friend' : 'friends' }}</span>
+    </div>
+
+    <!-- You Owe -->
+    <div class="balance-card">
+      <span class="card-label">You Owe</span>
+      <div class="card-amount amount-owed">
+        -{{ currency() }} {{ totalYouOwe().toFixed(2) }}
+      </div>
+      <span class="card-caption">to {{ friendsIOwe().length }} {{ friendsIOwe().length === 1 ? 'friend' : 'friends' }}</span>
+    </div>
+  </div>
+
+  <!-- Debt Relationships (Splitwise Columns) -->
+  <div class="relationships-container card">
+    <div class="relationships-header">
+      <h3>YOU ARE OWED</h3>
+      <h3>YOU OWE</h3>
+    </div>
+
+    <div class="relationships-body">
+      <!-- Left Column: People who owe you -->
+      <div class="relationship-col left-col">
+        @if (friendsWhoOweMe().length > 0) {
+          <div class="friend-debt-list">
+            @for (friend of friendsWhoOweMe(); track friend.id) {
+              <div class="friend-debt-row">
+                <div class="friend-info">
+                  <app-avatar [src]="friend.avatarUrl" [name]="friend.name" size="md"></app-avatar>
+                  <div class="friend-names">
+                    <a [routerLink]="['/friends', friend.id]" class="name-link">{{ friend.name }}</a>
+                    <span class="owes-text">owes you <strong class="amount-lent">{{ currency() }} {{ friend.balance.toFixed(2) }}</strong></span>
+                  </div>
+                </div>
+
+                <div class="friend-actions">
+                  <button class="btn btn-outline btn-sm" (click)="settleWithFriend(friend)">
+                    Settle
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="column-empty">
+            <span class="material-symbols-outlined">sentiment_satisfied</span>
+            <p>No one owes you right now</p>
+          </div>
+        }
+      </div>
+
+      <!-- Divider -->
+      <div class="col-divider"></div>
+
+      <!-- Right Column: People you owe -->
+      <div class="relationship-col right-col">
+        @if (friendsIOwe().length > 0) {
+          <div class="friend-debt-list">
+            @for (friend of friendsIOwe(); track friend.id) {
+              <div class="friend-debt-row">
+                <div class="friend-info">
+                  <app-avatar [src]="friend.avatarUrl" [name]="friend.name" size="md"></app-avatar>
+                  <div class="friend-names">
+                    <a [routerLink]="['/friends', friend.id]" class="name-link">{{ friend.name }}</a>
+                    <span class="owes-text">you owe <strong class="amount-owed">{{ currency() }} {{ (-friend.balance).toFixed(2) }}</strong></span>
+                  </div>
+                </div>
+
+                <div class="friend-actions">
+                  <button class="btn btn-primary btn-sm" (click)="settleWithFriend(friend)">
+                    Pay Back
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="column-empty">
+            <span class="material-symbols-outlined">check_circle</span>
+            <p>You do not owe anything!</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Expenses Section -->
+  <div class="recent-expenses-section card">
+    <div class="section-card-header">
+      <div class="header-title-wrap">
+        <span class="material-symbols-outlined header-icon">receipt_long</span>
+        <h3>Recent Expenses</h3>
+      </div>
+      <a routerLink="/expenses" class="view-all-link">View all expenses &rarr;</a>
+    </div>
+
+    @if (recentExpenses().length > 0) {
+      <div class="expenses-list">
+        @for (expense of recentExpenses().slice(0, 5); track expense.id) {
+          <div class="expense-row">
+            <div class="expense-left">
+              <div class="category-icon-box">
+                <span>{{ getCategoryEmoji(expense.category) }}</span>
+              </div>
+              <div class="expense-meta">
+                <span class="expense-title">{{ expense.title }}</span>
+                <span class="expense-sub">
+                  {{ expense.date }} &bull;
+                  @if (expense.groupId) {
+                    Group: {{ getGroupName(expense.groupId) }} &bull;
+                  }
+                  Paid by {{ getPayerName(expense) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="expense-right">
+              <div class="expense-cost">
+                <span class="cost-label">Total</span>
+                <span class="cost-value">{{ currency() }} {{ expense.amount.toFixed(2) }}</span>
+              </div>
+
+              <div class="expense-share" [ngClass]="getShareClass(expense)">
+                <span class="share-label">{{ getShareLabel(expense) }}</span>
+                <span class="share-value">{{ getShareAmountText(expense) }}</span>
+              </div>
+
+              <button class="delete-btn" (click)="deleteExpense(expense.id)" title="Delete expense">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <app-empty-state
+        icon="receipt_long"
+        title="No expenses logged yet"
+        description="Start by adding an expense to split costs with your friends or roomies."
+        actionLabel="Add Expense"
+        actionIcon="add"
+        (actionClicked)="openAddExpense()"
+      ></app-empty-state>
+    }
+  </div>
+</div>

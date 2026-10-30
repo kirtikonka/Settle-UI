@@ -1,0 +1,77 @@
+<div class="friends-page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Friends</h1>
+      <p class="page-subtitle">Track individual balances and shared debts with your friends</p>
+    </div>
+
+    <button class="btn btn-primary" (click)="openAddFriend()">
+      <span class="material-symbols-outlined">person_add</span>
+      Add a friend
+    </button>
+  </div>
+
+  <!-- Search Filter Bar -->
+  <div class="search-filter-card card">
+    <div class="search-input-wrap">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search friends by name or email..."
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <!-- Friends List Grid -->
+  @if (filteredFriends().length > 0) {
+    <div class="friends-grid">
+      @for (friend of filteredFriends(); track friend.id) {
+        <div class="friend-card card card-hover">
+          <a [routerLink]="['/friends', friend.id]" class="friend-link-area">
+            <app-avatar [src]="friend.avatarUrl" [name]="friend.name" size="lg"></app-avatar>
+            <div class="friend-info">
+              <h3 class="friend-name">{{ friend.name }}</h3>
+              <span class="friend-email">{{ friend.email }}</span>
+            </div>
+          </a>
+
+          <div class="friend-card-bottom">
+            <div class="balance-indicator">
+              <span class="balance-label">Status</span>
+              <div class="balance-val" [ngClass]="getBalanceClass(friend.balance)">
+                @if (friend.balance > 0.01) {
+                  owes you {{ currency() }} {{ friend.balance.toFixed(2) }}
+                } @else if (friend.balance < -0.01) {
+                  you owe {{ currency() }} {{ (-friend.balance).toFixed(2) }}
+                } @else {
+                  settled up
+                }
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn btn-outline btn-sm" (click)="settleWithFriend(friend)">
+                <span class="material-symbols-outlined">handshake</span>
+                Settle
+              </button>
+              <a [routerLink]="['/friends', friend.id]" class="btn btn-ghost btn-sm" title="View details">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <app-empty-state
+      icon="group"
+      title="No friends found"
+      [description]="searchQuery() ? 'No friends matched your search.' : 'Add your friends to start splitting expenses easily.'"
+      actionLabel="Add Friend"
+      actionIcon="person_add"
+      (actionClicked)="openAddFriend()"
+    ></app-empty-state>
+  }
+</div>

@@ -1,0 +1,127 @@
+.friends-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+}
+
+.search-filter-card {
+  padding: 0.75rem 1rem;
+
+  .search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      color: var(--text-subtle);
+      font-size: 1.25rem;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding-left: 2.5rem;
+      font-size: 0.95rem;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.friend-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  gap: 1rem;
+
+  .friend-link-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+
+    .friend-info {
+      display: flex;
+      flex-direction: column;
+
+      .friend-name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .friend-email {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+    }
+  }
+
+  .friend-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-light);
+    margin-top: auto;
+
+    .balance-indicator {
+      display: flex;
+      flex-direction: column;
+
+      .balance-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-subtle);
+      }
+
+      .balance-val {
+        font-size: 0.88rem;
+        font-weight: 700;
+
+        &.lent { color: var(--lent-color); }
+        &.owed { color: var(--owed-color); }
+        &.settled { color: var(--neutral-settled); font-weight: 500; }
+      }
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  }
+}
